@@ -59,7 +59,7 @@ class TitleRepository(val network: MainNetwork, val titleDao: TitleDao) {
             }
 
             if (result.isSuccessful) {
-                titleDao.insertTitle(Title(result.body()!!!))
+                titleDao.insertTitle(Title(result.body()!!))
             } else {
                 throw TitleRepository("Unable to refresh title", null)
             }
