@@ -51,7 +51,19 @@ class TitleRepository(val network: MainNetwork, val titleDao: TitleDao) {
      * the current tile.
      */
     suspend fun refreshTitle() {
-        delay(500)
+        withContext(Dispatchers.IO) {
+            val result = try {
+                network.fetchNextTitle().execute()
+            } catch (cause: Throwable) {
+                throw TitleRefreshError("Unable to refresh title", cause)
+            }
+
+            if (result.isSuccessful) {
+                titleDao.insertTitle(Title(result.body()!!!))
+            } else {
+                throw TitleRepository("Unable to refresh title", null)
+            }
+        }
     }
 }
 
