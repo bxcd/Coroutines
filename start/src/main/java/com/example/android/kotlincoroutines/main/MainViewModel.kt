@@ -102,9 +102,9 @@ class MainViewModel(private val repository: TitleRepository) : ViewModel() {
      */
     private fun updateTaps() {
         // TODO: Convert updateTaps to use coroutines
-        tapCount++
-        BACKGROUND.submit {
-            Thread.sleep(1_000)
+        viewModelScope.launch {
+            tapCount++
+            delay(1_000)
             _taps.postValue("${tapCount} taps")
         }
     }
